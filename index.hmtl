@@ -1,1 +1,94 @@
-ok
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>evolutionia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Supherhero">
+    <meta name="keywords" content="programming hero,learn programming">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/vnd.microsoft.icon">
+    
+
+    <!--custom css-->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+    <h3>evolutionia</h3>
+
+    
+
+</div>
+
+
+
+
+
+<!--main js-->
+<script src="js/main.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Evolution Simulation</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #log { white-space: pre-line; background: #f0f0f0; padding: 10px; border-radius: 5px; max-height: 300px; overflow-y: auto; }
+    button { padding: 10px 15px; margin-top: 10px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <h1>Evolution Simulation</h1>
+  <p>This simulates evolution of fitness over generations.</p>
+  
+  <button onclick="runEvolution()">Start Evolution</button>
+  <div id="log"></div>
+
+  <script>
+    function createCreature() {
+      return { fitness: Math.random() };
+    }
+
+    function createPopulation(size) {
+      const pop = [];
+      for (let i = 0; i < size; i++) {
+        pop.push(createCreature());
+      }
+      return pop;
+    }
+
+    function selection(population, survivors) {
+      population.sort((a, b) => b.fitness - a.fitness);
+      return population.slice(0, survivors);
+    }
+
+    function reproduce(parents, populationSize, mutationRate = 0.1) {
+      const newPop = [];
+      while (newPop.length < populationSize) {
+        const parent = parents[Math.floor(Math.random() * parents.length)];
+        let newFit = parent.fitness + (Math.random() * mutationRate * 2 - mutationRate);
+        newFit = Math.max(0, Math.min(1, newFit));
+        newPop.push({ fitness: newFit });
+      }
+      return newPop;
+    }
+
+    function runEvolution(generations = 20, populationSize = 10, survivors = 3) {
+      const log = document.getElementById("log");
+      log.textContent = "";
+      let population = createPopulation(populationSize);
+
+      for (let gen = 0; gen < generations; gen++) {
+        const best = population.reduce((max, c) => c.fitness > max ? c.fitness : max, 0);
+        log.textContent += `Generation ${gen} | Best fitness: ${best.toFixed(3)}\n`;
+        const parents = selection(population, survivors);
+        population = reproduce(parents, populationSize);
+      }
+    }
+  </script>
+
+</body>
+</html>
